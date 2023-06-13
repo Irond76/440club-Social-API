@@ -24,11 +24,11 @@ const userSchema = new mongoose.Schema({
         required: [true, 'Enter Password'],
         minlength: [8, 'Password Must Be At Least 8 Characters Long']
     },
-    confirmPassword: {
-        type: String,
-        required: [true, 'Password must match'],
-        minlength: [8, 'Password Must Be At Least 8 Characters Long']
-    }
+    // confirmPassword: {
+    //     type: String,
+    //     required: [true, 'Password must match'],
+    //     minlength: [8, 'Password Must Be At Least 8 Characters Long']
+    // }
 });
 
 const User = mongoose.model('User', userSchema);

@@ -5,6 +5,9 @@ const express = require('express');
 const app = express();
 const port = process.env.port || 5000;
 const DB = process.env.MONGODB_URI;
+const createUserRoute = require('./routes/users');
+app.use(express.json());
+app.use('/api/v1/members', createUserRoute);
 
 
 
