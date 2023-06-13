@@ -6,6 +6,9 @@ const app = express();
 const port = process.env.port || 5000;
 const DB = process.env.MONGODB_URI;
 
+
+
+// Connect to database and Server
 const startUp = () => {
     try {
         mongoose.connect(DB);
