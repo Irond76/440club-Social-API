@@ -23,9 +23,16 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, 'Enter Password'],
-        minlength: [8, 'Password Must Be At Least 8 Characters Long']
-        // pattern: '/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/'
+        minlength: [8, 'Password Must Be At Least 8 Characters Long'],
+        match: [/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/, 'Password must contains at least 1 uppercase letter, 1 lowercase letter, 1 number, and 8 characters long']
     },
+
+    role: {
+        type: Number,
+        default: 0
+    },
+
+
     // confirmPassword: {
     //     type: String,
     //     required: [true, 'Password must match'],
@@ -34,12 +41,17 @@ const userSchema = new mongoose.Schema({
 }, {timestamps: true});
 
 // encrypting password before saving
-// userSchema.pre('save', async function(next){
-//     if(!this.isModified('passowrd')){
-//         next();
-//     }
-//     this.password = await bcrypt.hash(this.password, 10)
-// })
+userSchema.pre('save', function(next){
+    if(!this.isModified('password')){
+        next();
+    }
+    this.password = bcrypt.hashSync(this.password, 10)
+})
 
-const User = mongoose.model('User', userSchema);
+// verify password
+userSchema.methods.comparePassword = async function(verifyingPassword){
+    return await bcrypt.compareSync(verifyingPassword, this.password);
+}
+
+const User = mongoose.model('Users', userSchema);
 module.exports = User;
