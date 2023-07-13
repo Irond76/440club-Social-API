@@ -26,6 +26,7 @@ const userSchema = new mongoose.Schema({
         minlength: [8, 'Password Must Be At Least 8 Characters Long'],
         match: [/^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9]).{8,}$/, 'Password must contains at least 1 uppercase letter, 1 lowercase letter, 1 number, and 8 characters long']
     },
+    verified: Boolean,
 
     role: {
         type: Number,
@@ -38,18 +39,18 @@ const userSchema = new mongoose.Schema({
     //     required: [true, 'Password must match'],
     //     minlength: [8, 'Password Must Be At Least 8 Characters Long']
     // }
-}, {timestamps: true});
+}, { timestamps: true });
 
 // encrypting password before saving
-userSchema.pre('save', async function(next){
-    if(!this.isModified('password')){
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
         next();
     }
     this.password = await bcrypt.hashSync(this.password, 10)
 })
 
 // verify password
-userSchema.methods.comparePassword = async function(verifyingPassword){
+userSchema.methods.comparePassword = async function (verifyingPassword) {
     return await bcrypt.compareSync(verifyingPassword, this.password);
 }
 

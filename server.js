@@ -23,12 +23,12 @@ app.use('/api/v1/members', createUserRoute);
 const startUp = () => {
     try {
         mongoose.connect(DB)
-        mongoose.connect(DB,{
-            useNewUrlParser:true,
-            useUnifiedTopology:true,
+        mongoose.connect(DB, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
             useCreateIndex: true
         })
-        app.listen(port, ()=> {
+        app.listen(port, () => {
             console.log(`440club server running on port ${port}...\nConnected to 440club Members Database`)
         })
     } catch (error) {
