@@ -41,7 +41,7 @@ transporter.verify((error, success) => {
 
 const sendVerificationEmail = ({ _id, email }, res) => {
     // url to be use in the email
-    const currentUrl = "https://localhost:5000/";
+    const currentUrl = "http://localhost:5000/";
 
     const uniqueString = uuidv4() + _id;
 
@@ -62,7 +62,8 @@ const sendVerificationEmail = ({ _id, email }, res) => {
                 userId: _id,
                 uniqueString: hashedUniqueString,
                 createdAt: Date.now(),
-                expiredAt: Date.now() + 21600000,
+                expiredAt: Date.now(),
+                // expiredAt: Date.now() + 21600000,
             })
             newVerification
                 .save()
@@ -150,9 +151,10 @@ const VerifyEmail = async (req, res, next) => {
                     // record expired so we delete it
                     UserVerification.deleteOne({ userId })
                         .then((result) => {
-                            User.deleteOne({ userId })
+                            // used {_id: userId} for User bc users collection does not have a field called userId but UserVerifications collection does
+                            User.deleteOne({ _id: userId })
                                 .then((result) => {
-                                    console.log(result);
+                                    console.log(`delete ${userId}`, result);
                                     let message = "Link has expired. Please sign up again";
                                     res.redirect(`/user/verified/error=true&message=${message}`);
                                 })
